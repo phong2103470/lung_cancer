@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ỨNG DỤNG HỖ TRỢ CHẨN ĐOÁN UNG THƯ PHỔI KHÔNG TẾ BÀO NHỎ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Đảm bảo footer dính ở cuối trang */
+        body {
+            min-height: 100vh; /* Chiều cao tối thiểu của body = chiều cao viewport */
+            display: flex;     /* Sử dụng Flexbox */
+            flex-direction: column; /* Căn dọc theo cột */
+            margin: 0;         /* Xóa margin mặc định */
+        }
+        main {
+            flex: 1; /* Phần nội dung chính chiếm toàn bộ không gian còn lại */
+        }
+    </style>
+
+    <script>
+        window.onload = function () {
+            if (performance.navigation.type === 1) { // Kiểm tra nếu trang được load lại (F5 hoặc Refresh)
+                window.location.href = window.location.pathname; // Tải lại trang mà không giữ lại dữ liệu
+            }
+        };
+    </script>
+
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-blue-500 text-white py-4 shadow-md">
+        <h1 class="text-center text-2xl font-bold">ỨNG DỤNG HỖ TRỢ CHẨN ĐOÁN UNG THƯ PHỔI KHÔNG TẾ BÀO NHỎ</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-6 p-4 bg-white shadow-md rounded-lg">
+        <form method="post" enctype="multipart/form-data" class="flex flex-col items-center space-y-4">
+
+            <!-- Dropdown chọn mô hình -->
+            <div class="mb-3">
+                <label for="model" class="text-lg font-medium">Chọn mô hình:</label>
+                <select name="model" id="model" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                    <option value="model_VGG16.h5" {% if selected_model == 'model_VGG16.h5' %}selected{% endif %}>VGG16</option>
+                    <option value="model_IncepV3.h5" {% if selected_model == 'model_IncepV3.h5' %}selected{% endif %}>InceptionV3</option>
+                </select>
+            </div>
+
+            <!-- Upload Section -->
+            <label for="image" class="text-lg font-medium">Tải lên ảnh:</label>
+            <input type="file" name="image" id="image" required 
+                   class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+            
+            <!-- Submit Button -->
+            <button type="submit" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded transition duration-300">
+                Chẩn đoán
+            </button>
+        </form>
+
+        <!-- Prediction Result -->
+        {% if prediction %}
+        <div class="mt-6 flex flex-col items-center space-y-4">
+            <!-- Display Uploaded Image -->
+            {% if img_path %}
+            <div class="mt-6 flex flex-col items-center">
+                <img src="{{ url_for('static', filename='uploads/' + img_path.split('/')[-1]) }}" 
+                    alt="Ảnh đã tải lên" 
+                    class="border border-gray-300 rounded shadow-md max-w-sm">
+            </div>
+            {% endif %}
+
+            <!-- Display Prediction Result -->
+            <h2 class="text-xl font-semibold">Kết quả chẩn đoán: {{ prediction }}</h2>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <p class="text-center text-sm">&copy; 2025 ỨNG DỤNG HỖ TRỢ CHẨN ĐOÁN UNG THƯ PHỔI KHÔNG TẾ BÀO NHỎ. ALL RIGHTS RESERVED.</p>
+    </footer>
+</body>
+</html>
